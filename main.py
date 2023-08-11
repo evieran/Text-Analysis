@@ -16,6 +16,7 @@ from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import sent_tokenize
 
 from gensim.corpora import Dictionary
 from gensim.models import ldamodel
@@ -31,7 +32,7 @@ import matplotlib.pyplot as plt
 %matplotlib inline
 
 # Lowercase words for word cloud
-word_cloud_text = great_expect.lower(0)
+word_cloud_text = great_expect.lower()
 # Remove numbers and alphanumeric words we don't need for word cloud
 word_cloud_text = re.sub("[^a-zA-Z0-9]", " ", word_cloud_text)
 
@@ -84,7 +85,6 @@ sentences.columns = ['sentence']
 print(len(sentences))
 print(sentences.head(10))
 
-
 # Remove the first few rows of text that are irrelevant for analysis
 sentences.drop(sentences.index[:59], inplace=True)
 sentences = sentences.reset_index(drop=True)
@@ -105,7 +105,7 @@ def grey_color_func(word, font_size, position, orientation, random_state=None, *
     return "hsl(0, 0%%, %d%%)" % random.randint(60,100)
 
 # Create advanced Word Cloud with our text data
-wordcloud = WordCloud(background_color = "purple" max_words=100, mask=mask, color_func = grey_color_func, stopwords = stopwords_wc, random_state = 1).generate(word_cloud_text)
+wordcloud = WordCloud(background_color = "purple", max_words=100, mask=mask, color_func = grey_color_func, stopwords = stopwords_wc, random_state = 1).generate(word_cloud_text)
 plt.figure(figsize=(8, 6))
 plt.imshow(wordcloud)
 plt.axis("off")
@@ -162,7 +162,6 @@ len(dictionary)
 # Create corpus for LDA analysis
 corpus = [dictionary.doc2bow(text) for text in data]
 len(corpus)
-
 
 # How to perform topic modeling
 # Find optimal k value for the number of topics for our LDA analysis
